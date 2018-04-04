@@ -1,0 +1,28 @@
+Server
+
+    --IPADDR_SCANS
+        --rowid(unique)
+        --IPADDR
+        --TIMESTAMP
+        --source_ip
+        --port_data
+        --exec_time
+        --command
+        --raw_data
+
+    --BAD_DATA
+        --rowid(unique)
+        --data
+        --TIMESTMP
+
+
+Client
+
+    --IPADDR_SCANS
+        --rowid(unique)
+        --IPADDR
+        --TIMESTAMP
+        --port_data
+        --exec_time
+        --command
+        --raw_data

@@ -1,0 +1,59 @@
+AUTONMAP
+
+    Automatic Installation
+        with the command
+            $ sudo python<version> -m pip install <tar.gz file of program>
+            $ sudo python3.4 -m pip install FL_TaHc_001.tar.gz
+
+    Automatic Uninstall
+        with the command
+            $ sudo python<version> -m pip uninstall autonmap
+            $ sudo python3.4 -m pip uninstall autonmap
+
+    Server
+        Automatic Service
+            Restarts server after restart or crash
+        Reporting of data inside of the servers database
+        Automatic connection handling
+            Threaded connections to handle multiple connections at once
+        Database to store data from client machines
+            Ability to store partial data from client if connection was reset in transmission
+            Database located at autonmap/server.sqlite
+        Ability to change server ip address and port
+            Done through autonmap/server_settings.ini - server_ip, server_port
+        Server status reporting
+            with the command
+                sudo service autonmap status
+
+    Client
+        Use nmap with elevated privileges to conduct through scans of a target
+        Three form scan
+            1st scan locates easy to find hosts on a specified network with the built-in nmap host discovery
+                It then scans for the most common open ports of the host machine
+            2nd Scan for uncommon ports on target machine
+            3rd Scan all ports on all non-discovered hosts from the first step
+                This allows the autonmap program to quickly gather data on a target network and then
+                move on to the more difficult hosts which could take a very long time
+        Automatic Connection Handling
+            Connects to server to gather work and report completed work
+        Database to store data from scan as a redundancy to the server
+        Ability to change server key functions of the client
+            Add/remove extra scans from nmap
+                Each line of the following gives one extra command to have nmap conduct
+                file is autonmap/options.txt
+            Ability to change server
+                autonmap/settings.ini - server_ip, server_port
+            Ability to change max thread count of client
+                autonmap/settings.ini - max workers
+            Ability to change default nmap scan parameters
+                autonmap/settings.ini - argument
+            Ability to change max timeout for connections to server
+                autonmap/settings.ini - Max_Timeout_Sec
+
+    Cron
+        Sets up a cron task to run on client machine so that scans will take place at the interval specified in
+            the autonmap/settings.ini - scantime_hours
+
+    Automatic Logging
+        Log file located at
+            /tmp/autonmap.log

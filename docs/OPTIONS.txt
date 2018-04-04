@@ -1,0 +1,4 @@
+All options can be edited and changed once the program has been launched at least once.
+ After the application hs been launched look under the user who launched it's main folder '~/'
+ for a folder called autonmap. Inside the autonmap folder will be all the data and config files associated
+ with this application.

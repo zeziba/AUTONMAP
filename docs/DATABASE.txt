@@ -1,0 +1,6 @@
+Using python's inbuilt sqlite3 database api, the output can be view with a free to use add-on for
+firefox mozilla called SQLite Manager which can be gained from the following address
+https://addons.mozilla.org/en-US/firefox/addon/sqlite-manager/
+
+After installation of the add-on navigating to the menu bar and selecting tools will allow you to access it from
+firefox.

@@ -1,0 +1,171 @@
+1. Installation
+
+    ---Move files on to the machine of choice---
+
+    The easiest way is to use the built in too scp to move the files to the machine
+
+        $ scp <FILE> <hostname>@<host address>:<folder location>
+        $ scp file.tar.gz user@host.ip.net:~/
+
+    This command will also ask for the destinations password if it is enabled, once the password is entered the
+    file will be transferred-
+
+    ---IMPORTANT---
+
+    On the VM you had me used, Linux CentOS was installed, I had to install python<version>.4 to get full compatibility with
+    this program and its sub systems although python 3.6 can also be used as well as 3.2
+
+    To get the program and everything needed run these commands
+
+        $ sudo yum install python34
+        $ sudo yum install python34-devel
+        $ sudo yum install python34-pip
+
+        $ sudo python3.4 -m pip install --upgrade pip setuptools
+
+    Once that is done you can continue.
+
+    ---END---
+
+    Run the following command in the folder containing the .tar.gz
+
+        $ sudo python<version> -m pip install -v FL_TaHc_001.tar.gz
+
+        During the installation the installer will ask if you are a client or not, if so answer yes else enter n or
+        just hit enter
+
+            It will appear to be doing something with just ... as a line pressing n/y and hitting enter will
+            continue the installation.
+
+        The '-v' argument must be passed to see this output but if it is not it still accepts the same input and
+        will wait until it has it.
+
+    Once the program is installed and the dependencies are installed it is time to enable the client script in the
+    sudoers file so that it can properly run nmap.
+
+    To do this the location fo the script is required, it is built-in the program to report this location if
+    it is called with no arguments. So preform the following command
+
+        $ python<version> -m autonamp
+
+    It should output something like
+
+        <module 'launch_client' from '/home/FL_TaHc_001/autonmap/__main__.py'>
+
+    ---NOTE---
+    The following is important if the client is not run by sudo! To avoid many of the pitfalls of the Linux
+    use sudo to run the command.
+    ----------
+
+    NON-SUDO:
+
+    It is very important that the __main__.py be added to the sudoers file so that the nmap scans can take place.
+
+    Copy the file directory including the script name
+
+    Next launch the visudo tool to edit the sudoers file as follows
+
+        $ sudo visudo
+
+    Next is optional, create a new user just with permissions to run python<version> and the scripts and this user
+    will be the one added to the sudoers file to execute the script. This user will have a background process running
+    as well.
+
+    Navigate to where you would like to add the entry in the /etc/sudoers file and in that place add the following
+
+        <USERNAME> <HOSTNAME> = <USER TO RUN AS> NOPASSWD: <SCRIPT LOCATION>
+
+    This will look like the following
+
+        ALL ALL = (root) NOPASSWD: /usr/bin/python<VERSION>/scriptloaction/__main__.py
+        ALL ALL = (root) NOPASSWD: /usr/bin/python<VERSION>/scriptloaction/launch_client.py
+
+    Once the script is added to the sudoers files save and verify that it is there. No the program is set up
+    and ready to run
+
+    Final note, if tty is enabled on the system the script will be unable to run, the script must be allowed to run
+    with out tty. To do this add the file to the sudoers file using the visudo command the the proper override
+
+        $ sudo visudo
+        --Place next under the passage added for the program in the previous instruction.
+        Defaults!/<SCRIPT LOCATION> !requiretty
+
+        -- This will look like
+        Defaults!/usr/bin/python<VERSION>/scriptloaction/__main__.py !requiretty
+
+    After being allowed to run without tty or a sudo command the scripts will be able to execute the proper
+    nmap scans.
+
+    Then add the client to the cron tasks by doing
+
+        $ autonmap cron
+
+    SUDO:
+
+    Add the job to the cron jobs of sudo, it as easy as the following
+
+        $ sudo autonmap cron
+
+    This will add a cron job to the cron tab in sudo, the task will have sudo permissions and the output will be saved
+    in the /root/autonmap folder
+
+
+2. Running and Editing Settings.ini
+
+    ---NOTE---
+    Before running the script the localhost default of the server must match the local ip address of the host machine
+    So if the host machine is assigned an address of 10.0.0.4 it must be set as such in the server_settings.ini file
+
+    Also the port must be accessible from outside the network so port forward to that port of the server machine
+
+    Once both of these are set then the clients will be able to contact the server.
+
+    Also the client ip address must be set to the host address it can be done in ip address form or the host
+    name, as long as the host name is resolvable
+
+    So both of these formats would work
+
+        10.0.0.4
+    ----------
+
+    To run the program type the following command into the terminal
+
+        $ python<version> -m autonmap <server|client> <start|stop|update|report>
+
+    Each component can also be run as follows
+
+        $ python<version> -m autonamp-client
+        $ python<version> -m autonmap-server
+
+        OR
+
+        $ autonmap <server|client> <start|stop|update|report>
+
+        Both of these commands run the actual process in the terminal, the
+            $ python<version> -m automap server start
+        This command can be used to create a manual server but the server is currently a process so
+        it should always run
+        To check run the following command
+            $ service autonmap status
+
+    The start command is the only command that the client accepts.
+
+    TODO: Add ability to edit config ini on web interface along with report data
+
+    The default server setting is the local host on port 12990 and the client is set to default to that as well.
+    Once the server is active the client is completely able to fulfill its task of sniffing out networks assigned in
+    the work.txt file.
+
+    All config files and work files are located in the ~/autonmap folder, if the program is run from sudo then it will
+    be in the /root/autonmap folder
+
+    As the default client is configured to run from sudo all automated scans will be located in the /root/autonmap
+    folder
+
+    Important Files are:
+
+        autonmap/settings.ini
+        autonmap/server_settings.ini
+        autonmap/options.txt
+
+
